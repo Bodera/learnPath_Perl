@@ -220,5 +220,58 @@ Perl doesn't have a typical switch-case statement, instead, it provides a given/
 Joanne is thrilled to see the Perl language's simplicity and ease of use, she wants to get a feel for how Perl's file handling and regular expressions are performed. Perl let's you perform file read and write operations with a single line of code. Let's move to another code snippet to demonstrate it:
 
 ```perl
-my $file = 'dummy
+my $file = 'dummyfile.txt';
+
+open (my $wfh, '<', $file);
 ```
+
+The statement `my $file = 'dummyfile.txt';` assigns a value of `dummyfile.txt` to a scalar variable file. The `open` command accepts three arguments, the first is a scalar variable and you can think of it as file pointer, the second argument dictates the mode of operation (read, write, or append), the third argument is the actual file variable which the file name is assigned. This single line of Perl code is good enough to open a file in read mode. If you want to write contents to a file, all you need to do is change the file mode from read to write (`'>'`) or append (`'>>'`).
+
+This looked too good to be true to Joane and she wanted to know how to handle the negative cases, like file not being present, file not having the right access, or any other negative cases that may happen. That's simple as well, all you need is a simple if loop that checks if the file exists, which can be achieved using the `-e` switch. You can also check if the file is readable using the `-r` switch.
+
+This is great to handle all compile-time scenarios gracefully. How about gracefully handling runtime errors? What if you want to terminate the program or issue a warning to the user if the file does not exists? You can achieve it using a `die` or `warn` class followed by the Perl special variable `$!`, which prints a system error. The `die` class will cause the program to exit, whereas a warn will continue with execution.
+
+```perl
+my $file = 'dummyfile.txt';
+
+if (-e -r $file)
+
+open(my $wfh, '<', $file) or die $!;
+```
+
+Now let's see how regular expressions are handled in Perl. The first thing you will notice while using regular expressions is a pattern-binding operator:
+
+- `=~`: checks if the value held by the variable to its left matches the pattern.
+- `!~`: checks if the value held by the variable to its left doesn't matches the pattern.
+
+Typically, you will see an if statement surrounding this tests, but there are three different regular expressions in Perl.
+
+- `m//`: the match operator, used to match a string or a statement to a regular expression.
+- `s///`: the substitution operator, used to search a string or a statement that matches the given regular expression and replace occurrences of this pattern with the replacement pattern.
+- `tr///`: the translation operator, used to convert strings on a character-by-character basis. Useful in situations like when you want to convert all lowercases characters to uppercase.
+
+These operators also come with operator modifiers that can be added at the end, that makes the operation case insensitive `/i`, perform global operations `/g`, and many more.
+
+Joane is aware that Perl has been used primarily as a procedural language during it's beginning days. Now with latest release, Perl supports object-oriented programming. She's curious to know how Perl implements the object-oriented design.
+
+The keyword `package` is used to define a class, and typically all the classes are saved in separated files. A class can contain properties and methods, and those methods are implemented using Perl subroutines. To import our references class in a different program, we need the `use` keyword that exposes the class to the current program and use the `new` keyword to create an instance of an object of this class. Perl supports inheritance that let's you write a class that inherits the properties and methods from the pattern class. Unlike Java and other popular languages, Perl allows multiple inheritance but is strongly recommended against using it. Perl does support other object-oriented features like polymorphism and encapsulation.
+
+---
+
+Joane feels that she learned a lot from the last three meetings with Tanabe. However, there is one thing that is still at the back of her mind that is unanswared. She wants to know how Perl compares with some of the other popular languages like Python, PHP, and Ruby, and also learn what value propositions they offer and how Perl compares with the features offered by other competing languages. Let's dive deep and learn about Perl competition.
+
+You should not be surprised when I say Python is the number one competitor. Just like Perl, it is also compiled and interpreted language, and it is supported on multiple OS like Mac, Linux and Windows. It let's you write both, procedural and object-oriented code. Pytohn is open-source and just like Perl has extensive libraries and modules. An important area where Perl differs from Python is the code readability, you learn that Perl has more than one way to write a code, but Python has a simple, one-answer solution. In the area of machine learning and data science, Python has become the de facto standard.
+
+Though both Perl and PHP are open-source free languages and they support to write procedural and object-oriented code, one of the areas where PHP stands out is its ability to be easily embedded into HTML documents. We saw that Perl has only three data types, and all the primitive data types are grouped as scalar variables, but in PHP you have the primitive types. Perl was developed as a general purpose scripting language, thus PHP was developed to be used for scripting web pages, so a lot of web-related things like sending an e-mail from your web page of fetching a document from HTTP or FTP server are baked inside the language, in contrast, you may need to rely on modules to achieve the same tasks in Perl. When it comes to text processing PHP cannot beat the features offered by Perl.
+
+Like Perl CPAN module system, Ruby has RubyGems, which is a common package repository. Both excel when it comes to regular expressions because regex is built right into the language. Ruby is a strict object-oriented language, thus everything is considered as object. You've saw that Perl was heavily influenced by languages like C, AWK, Sed, and Lisp, whereas Ruby is influenced by C++ and Java. Ruby is extensively used in meta programming and functional programming. It can be leveraged in designing web applications that cater to heavy traffic, but Ruby has less support for Unicode compared to Perl.
+
+When evaluating a language for your project, the 'one size fits all' approach doesn't work. Select a language that suits your business requirement.
+
+## Your next steps
+
+- [Perl official site](perl.org)
+- [Perl official documentation](perldoc.perl.org)
+- [Perl debugging tools](debugger.perl.org)
+- [Perl FAQ](learn.perl.org/faq)
+- [Regex 101](regex101.com)
