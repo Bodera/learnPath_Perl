@@ -6,7 +6,7 @@ Perl is not a strongly typed language, because a strongly typed language has exp
 
 Perl performs implicit conversion during runtime. There are no individual types for integer, string, and float in Perl. Instead, they are categorized as **scalar types**, but Perl also supports complex data types like lists, arrays, and hashes.
 
-Now imagine your requirement states that your utility needs to scan for four different cards and they are not going to change this requirement.
+Now imagine your requirement states that your utility needs to scan for four different cards, and they are not going to change this requirement.
 
 To declare a constant in Perl, you just write:
 
@@ -22,7 +22,7 @@ Unlike constants, a string literal is not assigned to anything and can't be reus
 
 Now talking about variables, a variable is used to hold a piece of data to be reused in the program. Any Perl variable must begin with a dollar sign `$`.
 
-When writing Perl variables and constants, you need to remember that they're case sensitive, and they also must start with a letter or an underscore. Hyphen and spaces are also not allowed for naming them.
+When writing Perl variables and constants, you need to remember that they're case-sensitive, and they also must start with a letter or an underscore. Hyphen and spaces are also not allowed for naming them.
 
 Now we're going to take a look about some Perl features that helps us in proper error handling.
 
@@ -36,7 +36,7 @@ print "Card number: $Card1\n";
 # output: Card number: Card1
 ```
 
-We can see that because Perl variables are case sensitive, we can't output the expected value in our print statement, however the mispelling is identified as an error which may cause some problems as we evolve our script.
+We can see that because Perl variables are case-sensitive, we can't output the expected value in our print statement, however the misspelling is identified as an error which may cause some problems as we evolve our script.
 
 ```perl
 #!/usr/bin/perl
@@ -158,7 +158,7 @@ To end this lesson, just pay attention to all the interpolations we've seen so f
 
 Let's move and explore the different operators supported in Perl, starting with the numeric ones.
 
-Before looking at numeric opperators, let's understand Perl numbers better. By default all the numbers in Perl are expressed as base 10, but you can display a binary number by prefixing it with `0b`, a hexadecimal number by prefixing it with `0x` or `0X`, and a octal number by prefixing it with `O`.
+Before looking at numeric operators, let's understand Perl numbers better. By default, all the numbers in Perl are expressed as base 10, but you can display a binary number by prefixing it with `0b`, a hexadecimal number by prefixing it with `0x` or `0X`, and an octal number by prefixing it with `O`.
 
 ```perl
 #!/usr/bin/perl
@@ -233,7 +233,7 @@ A logical `OR` is true if any of the operands is true, is represented by two pip
 | TRUE      | FALSE     | TRUE   |
 | FALSE     | FALSE     | FALSE  |
 
-A logical `NOT` is true if the operand is false, because it reverses the boolean value, is represented by the exclamation sign `!` . The following table illustrates how logical `NOT` works.
+A logical `NOT` is true if the operand is false, because it reverses the boolean value, is represented by the exclamation sign `!`. The following table illustrates how logical `NOT` works.
 
 | Operand 1 | Result |
 |:---------:|:------:|
@@ -305,11 +305,11 @@ print $name x 2, "\n";
 
 ### Lists and Arrays
 
-Until now we saw scalar variables, like numbers and strings. What if we need to store a list of values, like a list of all employee titles in your office, list of branch locations of your office, and so on?
+Until now, we saw scalar variables, like numbers and strings. What if we need to store a list of values, like a list of all employee titles in your office, list of branch locations of your office, and so on?
 
-It's just not pratical to store each value in an individual scalar variable. Perl let's you group related scalar values into a list.
+It's just not practical to store each value in an individual scalar variable. Perl lets you group related scalar values into a list.
 
-A list is an ordered sequence of integers and strings. A list can contain other lists. You can use the `@` operator to create a list, and the elements are enclosed in parentheses, separeted by commas.
+A list is an ordered sequence of integers and strings. A list can contain other lists. You can use the `@` operator to create a list, and the elements are enclosed in parentheses, separated by commas.
 
 ```perl
 #!/usr/bin/perl
@@ -365,7 +365,7 @@ use warnings;
 print qw(b 2 c), "\n";
 ```
 
-Imagine you wanted to access a specific element in your list. Perl let's you do it using the indexing operator:
+Imagine you wanted to access a specific element in your list. Perl lets you do it using the indexing operator:
 
 ```perl
 #!/usr/bin/perl
@@ -440,8 +440,6 @@ $hash{d} = 4;
 print("Value of the added element is $hash{'d'}\n");
 ```
 
----
-
 ## Summary
 
 Let's recap what we've learned so far:
@@ -450,4 +448,4 @@ Let's recap what we've learned so far:
 - Blocks and scopes, and how Perl performs variable interpolation.
 - Numbers and strings, and also arithmetic, logical, and string operators.
 - Storing sequence of related data in lists and arrays, and the difference between them, so as common operations they support.
-- Finally hashes, and how to store and fetch data from them.
+- Finally, hashes and how to store and fetch data from them.

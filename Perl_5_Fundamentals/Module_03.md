@@ -2,7 +2,7 @@
 
 In this module we'll take a look at controlling the execution using loops in Perl. Let's start by learning how to implement branching logic using *if* and *if-else* statements.
 
-It's very common that your program needs to execute a code based on certain conditions. You can achive this using the *if* statement. The ideia is that along the flow of execution of some routine, some condition needs to be evaluated. If the condition is true, a set of code will be executed, otherwise that set of code will be skipped.
+It's very common that your program needs to execute a code based on certain conditions. You can archive this using the *if* statement. The idea is that along the flow of execution of some routine, some condition needs to be evaluated. If the condition is true, a set of code will be executed, otherwise that set of code will be skipped.
 
 In the following example, based on the given array, print the total number of elements in the array when the size of the array is equal to 4. 
 
@@ -59,7 +59,7 @@ if ($cards_size < 5 && $cards_size > 0) {
 }
 ```
 
-Now let's introduce the use of the *unless* statement, which produces the same result as the *if not* statement `if (!<condition>)`. You can also use the *unless* statement in combination with the *if* and *else* statement. But that may tend to be confusing and not readable.
+The next example shows the use of the *unless* statement, which produces the same result as the *if not* statement `if (!<condition>)`. You can also use the *unless* statement in combination with the *if* and *else* statement. But that may tend to be confusing and not readable.
 
 ```perl
 #!/usr/bin/perl
@@ -125,7 +125,7 @@ for (my $number = 0; $number < 3; $number++) {
 
 ---
 
-Now we're going to learn *while* loop and the *do.. while* loop, as well as the scenarios of when to use one or the other.
+Now we're going to learn *while* loop and the *do..while* loop, as well as the scenarios of when to use one or the other.
 
 A *while* loop check the condition first and continue to execute the code block as long as the condition remains true. Once the condition evaluates to false, the loop is terminated. So your code block needs to have some logic that eventually make the checking condition turn false. Otherwise, you will end up in an infinite loop. Unlike a *for* loop, the *while* loop doesn't provide a default iterator, so we need to iterate it ourselves.
 
@@ -148,7 +148,7 @@ while ($index <= $#cards) {
 
 Perl offers a variation of the while loop called *do..while* loop as a minor variation between both of them.
 
-In the *while* loop you saw that the condition was checked at the beginning of the loop. Whereas in the *do.. while* loop, the condition is checked at the end. You might think what difference does it make? Well, on the *while* loop, there is a possibility that the execution might not even enter the loop. In contrast, the condition is checked at the end in *do.. while* loop, and even if the condition evaluates to false, the loop will be executed at least once.
+In the *while* loop you saw that the condition was checked at the beginning of the loop. Whereas in the *do..while* loop, the condition is checked at the end. You might think what difference does it make? Well, on the *while* loop, there is a possibility that the execution might not even enter the loop. In contrast, the condition is checked at the end in *do.. while* loop, and even if the condition evaluates to false, the loop will be executed at least once.
 
 Let's check some Perl code illustrating the *do..while* loop.
 
@@ -166,7 +166,7 @@ do {
 } while ($index == 0);
 ```
 
-Let's now consider a business case where another card with the name `Diners` has been added to our card array, and we have been instructed to skip the processing for the `Diners` card. Let's use Perl control statement *next* to achieve it.
+Let's now consider a business case where another card with the name `Diners` has been added to our card array, and we have been instructed to skip the processing for the `Diners` card. Lets use Perl control statement *next* to achieve it.
 
 ```perl
 #!/usr/bin/perl
@@ -189,7 +189,7 @@ while ($index <= $#cards) {
 }
 ```
 
-Imagine another scenario where you are instructed not just to skip the process if the `Diners` card is founs, but completely stop processing any futher. To do so, you can use Perl control statement *last*.
+Imagine another scenario where you are instructed not just to skip the process if the `Diners` card is found, but completely stop processing any further. To do so, you can use Perl control statement *last*.
 
 The *last* statement works like a *break* statement that exits the current loop.
 
@@ -215,7 +215,7 @@ while ($new_index <= $#my_cards) {
 
 ---
 
-Now we'll learn about the *until* and *do..until* loops. We've saw that a *while* loop will check the condition first and then executes a block of code as the condition remains true. Now an *until* loop is quite the opposite of a *while* loop in the sense that it will run a block of code as long as the condition is false.
+Now we'll learn about the *until* and *do..until* loops. We've seen that a *while* loop will check the condition first and then executes a block of code as the condition remains true. Now an *until* loop is quite the opposite of a *while* loop in the sense that it will run a block of code as long as the condition is false.
 
 Let's check some Perl code illustrating the *until* loop.
 
@@ -255,7 +255,7 @@ while ($index <= $#cards) {
 }
 ```
 
-Now let's check the *do..until* loop. Just like the *do.. while* loop, it runs at least once before the loop is terminated, and keeps running as long as the condition is false.
+Now let's check the *do..until* loop. Just like the *do..while* loop, it runs at least once before the loop is terminated, and keeps running as long as the condition is false.
 
 ```perl
 #!/usr/bin/perl
@@ -314,16 +314,16 @@ until ($new_index > $#my_cards) {
 
 ---
 
-Now we're going to learn the Perl *given-when* statement. You could use an *if* statement to evaluate conditional logic, but what if there are multiple conditions presented? Your code will look cluttered and hard to read. If have some foundation on languages like C, and Java, you must be familiar with the *switch* statement. However, Perl doesn't offer one, instead it provides the *given-when* statement.
+Now we're going to learn the Perl *given-when* statement. You could use an *if* statement to evaluate conditional logic, but what if there are multiple conditions presented? Your code will look cluttered and hard to read. If you have some foundation on languages like C, and Java, you must be familiar with the *switch* statement. However, Perl doesn't offer one, instead it provides the *given-when* statement.
 
 If you plan to use this feature, you need to remember a few things:
 
-1. This feature available on Perl 5.0.10+, so use the pragma `use feature 'switch'` or `use v5.0.10` to enable it.
+1. That is a feature available on Perl 5.0.10+, so use the pragma `use feature 'switch'` or `use v5.0.10` to enable it.
 2. This feature also uses a Perl __smartmatch__ operator `~~`, which is still in experimental status.
 
 It behaves like: when the expression returns the first value, the first code block is executed, if not, the expression is rechecked, and if it returns the second value, the second code block is executed, if not, the expression is rechecked, and so on. You can write a *default* section that will be used for cases that are not handled by any specific values, just like a catch-all bucket. 
 
-Now let's check some Perl code illustrating the *given-when* statement. The requirement is to prompt the user to enter a credit card type, and if it one of the Visa, Master, Amex, or Discover, we need to print a message that our utility will check for the entered card type. If the user enters something else, we need to print a default message saying `Unrecognized card type`.
+Now let's check some Perl code illustrating the *given-when* statement. The requirement is to prompt the user to enter a credit card type, and if it's one of the Visa, Master, Amex, or Discover, we need to print a message that our utility will check for the entered card type. If the user enters something else, we need to print a default message saying `Unrecognized card type`.
 
 ```perl
 #!/usr/bin/perl
@@ -358,7 +358,7 @@ given (<STDIN>) {
 
 We reached the end of this module. Let's recap what we've learned so far:
 
-1. Implementing branching logic using if, elsif, and else statments
+1. Implementing branching logic using if, elsif, and else statements
 2. Implementing if not logic using Perl unless
 3. Iterate over collections using for loop
 4. Setup conditional logic using while and do..while, and until and do..until

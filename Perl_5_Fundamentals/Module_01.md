@@ -84,9 +84,9 @@ print "Now we will scan for unmasked credit card numbers in the directory: $dirn
 
 ### Using Perl native debugger
 
-As your program starts to get complex, you will be stumped with errors that will require the help of a debugger. On [this site](https://debugger.perl.org/tools.html) you'll find many auxiliary tools to help you debugging your Perl scripts.
+As your program starts to get complex, you will be stumped with errors that will require the help of a debugger. On [this site](https://debugger.perl.org/tools.html) you'll find many auxiliary tools to helping you debug your Perl scripts.
 
-Here we're going to explore the built-in command line debugger provided by Perl, it may looks cryptic at first sigh compared to other visual debuggers, but trust me, this is a lot easier. Documentation available [here](https://perldoc.perl.org/perldebug). There are many debugger commands that you can use like, print the value of an expression, step through the execution, execute over subroutine calls, set a breakpoint before a line, set a breakpoint based on a condition, and much, much more.
+Here we're going to explore the built-in command line debugger provided by Perl, it may look cryptic at first sigh compared to other visual debuggers, but trust me, this is a lot easier. Documentation available [here](https://perldoc.perl.org/perldebug). There are many debugger commands that you can use like, print the value of an expression, step through the execution, execute over subroutine calls, set a breakpoint before a line, set a breakpoint based on a condition, and much, much more.
 
 ```cmd
 $ perl -d take_user_input.pl "./my_log_directory/"
@@ -116,9 +116,9 @@ perl -d take_user_input.pl "./my_log_directory/"
 
 Then, inside the built-in debugger, we can see that it's currently waiting at line 7, and we know this based on the statement it prompts `main::(.\take_user_input.pl:7): $dirname = $ARGV[0];`.
 
-We can evaluate expressions and print variables inside the inner prompt of the debugger, the one with starts with `DB<someNumber>`. At first we tried to print the value of our variable `$dirname`, and how it wasn't already assigned it returned nothing. Them we move our debugger to the next line using `n` and then tried to print it again so it returned `./my_log_directory/`. To exit the debugger and abort the execution of our script we used `q`.
+We can evaluate expressions and print variables inside the inner prompt of the debugger, the one with starts with `DB<someNumber>`. At first, we tried to print the value of our variable `$dirname`, and how it wasn't already assigned it returned nothing. Then we move our debugger to the next line using `n` and then tried to print it again, so it returned `./my_log_directory/`. To exit the debugger and abort the execution of our script we used `q`.
 
-This is a handy, lightweight debugger that can come to your rescue if you quickly want to check the value of certain variables during your development. But when you have a long program, it's not practical to step through line-by-line, you may want to jump to a specific line containing a specific variable that you want to monitor, and to archieve this you can use breakpoints.
+This is a handy, lightweight debugger that can come to your rescue if you quickly want to check the value of certain variables during your development. But when you have a long program, it's not practical to step through line-by-line, you may want to jump to a specific line containing a specific variable that you want to monitor, and to achieve this you can use breakpoints.
 
 Supposing we have the program:
 
@@ -177,6 +177,6 @@ salutations
   DB<4> q
 ```
 
-Here we initialized our `demo_breakpoint.pl` in debugger mode and used the `v` command to display a few lines arount the current position of our debugger, which is indicated using the arrow mak at the right of the current line `4==>`.
+Here we initialized our `demo_breakpoint.pl` in debugger mode and used the `v` command to display a few lines around the current position of our debugger, which is indicated using the arrow mark at the right of the current line `4==>`.
 
-Then we used the `b` command to set a breakpoint to the line which we would like to set a breakpoint, line 8. After that we wanted to confirm if the breakpoint was set correct using the `v` command again, but this time informing an amount of lines to show around the current line, and we can see the `b` character next to the line 8 `8:b`. Hence we've set a breakpoint, we skipped our debugger right to it using the `c` command, the debugger informs us he stoped at line 8 by printing the statement `main::(.\demo_breakpoint.pl:8): print("Goodbye!\n");` to the console.
+Then we used the `b` command to set a breakpoint to the line which we would like to set a breakpoint, line 8. After that we wanted to confirm if the breakpoint was set correct using the `v` command again, but this time informing an amount of lines to show around the current line, and we can see the `b` character next to the line 8 `8:b`. Hence, we've set a breakpoint, we skipped our debugger right to it using the `c` command, the debugger informs us he stopped at line 8 by printing the statement `main::(.\demo_breakpoint.pl:8): print("Goodbye!\n");` to the console.
