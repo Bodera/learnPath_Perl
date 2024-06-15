@@ -281,6 +281,8 @@ When working with a single script, `warn` and `die` will work just fine. But whe
 
 ## Summary
 
+On this module you've learned that:
+
 - Importance of file handles in file manipulation on directories.
 - The six file modes supported by Perl.
 - How to read files fully and partially by moving the file pointer to a specific location.

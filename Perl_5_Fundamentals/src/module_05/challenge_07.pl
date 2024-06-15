@@ -15,12 +15,12 @@ print "Start reading the final challenge log files...\n";
 while ( my $filename = readdir($directory_handle) ) {
     if ( $filename =~ /final_challenge.log/ ) {
         print "Opening file: $filename\n";
-        open( my $file_handle, '+<', $log_directory . $filename ) or die $!;
+        open( my $file_handle, '+<', $log_directory . $filename ) or die $!; # open file in read and write mode
 
         my $read_pos = tell($file_handle);    #holds current position of the reading pointer
         while (<$file_handle>) {
-            $_ =~ tr/[a-z]/[A-Z]/;
-            if ( $_ =~ s/(?<=NUMBER:\s)(\d+)(?=\d{4})/'*' x length($1)/e ) {
+            $_ =~ tr/[a-z]/[A-Z]/;            # converts all lowercase to uppercase
+            if ( $_ =~ s/(?<=NUMBER:\s)(\d+)(?=\d{4})/'*' x length($1)/e ) { 
 
                 # after detecting the line with credit card details prepares to rewrite.
                 # 0 - reads from the beginning
