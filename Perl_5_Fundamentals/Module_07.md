@@ -38,7 +38,7 @@ use warnings;
 require FileMasker;
 ```
 
-You can use either `use` or `require` keywords. To invoke the subroutine, you will use the module name, followed by doble colon `::`, and the subroutine name.
+You can use either `use` or `require` keywords. To invoke the subroutine, you will use the module name, followed by double colon `::`, and the subroutine name.
 
 ```perl
 #!usr/bin/perl
