@@ -56,3 +56,86 @@ $stm->finish();
 $dbhost->disconnect();
 ```
 
+## Security vulnerability in Perl scripts
+
+Though Perl is a very powerful language, hackers can easily attack it if your script is open for vulnerabilities, especially if your script is accepting arguments. That's because a script accepting arguments is similar to having an inlet to your home. Unless you protect it with proper security systems, an intruder may easily enter your property. A script is no different, you need to provide safeguards to prevent a potential hacker from misusing the script.
+
+Let's explore the following example:
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my $input = $ARGV[0];
+
+print "Input: $input\n";
+open (my $fh, $input) or die $!;
+
+while (<$fh>) {
+    print $_;
+}
+
+close $fh;
+```
+
+The script above accepts a file name as a script argument, opens this file, prints its content to the console, and finally, close the file. It is a straightforward script, and it doesn't look too complex. How could a potential hacker exploit it?
+
+From the command line, let's run our script providing the `db_credentials.txt` file as an argument:
+
+```bash
+perl danger.pl db_credentials.txt
+Input: db_credentials.txt
+POSTGRES_DB=module_08
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=1234
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+```
+
+We can confirm that it displays the whole content of the file. Now look at this:
+
+```bash
+perl danger.pl "dir |"
+Input: dir |
+Volume in drive Y is Data
+Volume Serial Number is 404F-9999
+
+Directory of /home/admin
+
+25/06/2024  01:54    <DIR>          .
+25/06/2024  01:54    <DIR>          ..
+25/06/2024  02:28               185 danger.pl
+               1 File(s)            185 bytes
+               2 Dir(s)         424.768 bytes free
+```
+
+Now it shows the actual contents of the directory. But that's not all.
+
+```bash
+perl danger.pl "copy ..\working_with_databases\db_credentials.txt |"
+Input: copy ..\module_03\db_credentials.txt |
+        1 file(s) copied.
+```
+
+We can even execute instructions from other files, like this:
+
+```bash
+perl danger.pl "perl ..\..\module_03\for_loop.pl |"
+Input: del db_credential.txt |
+2 * 2 = 4
+4 * 2 = 8
+6 * 2 = 12
+8 * 2 = 16
+10 * 2 = 20
+```
+
+If you're wondering why this is a big issue, imagine that a potential hacker can use the same process to copy malware to a specific directory and run it. He can copy a script that extracts all the credit card numbers and copy these numbers to a file, and any other **N** number of possibilities out there. We can simply delete a file from a directory.
+
+```bash
+perl danger.pl "del db_credentials.txt |"
+Input: del db_credentials.txt |
+```
+
+And the copied file has been deleted. An attacker could potentially use this method to delete critical files to your business once he knows its location, so it's paramount that you pay utmost importance not just to the business logic of your script, but running your business logic securely.
