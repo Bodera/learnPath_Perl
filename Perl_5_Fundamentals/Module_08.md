@@ -139,3 +139,106 @@ Input: del db_credentials.txt |
 ```
 
 And the copied file has been deleted. An attacker could potentially use this method to delete critical files to your business once he knows its location, so it's paramount that you pay utmost importance not just to the business logic of your script, but running your business logic securely.
+
+## Securing Perl scripts
+
+To address issues like those we've sawn, Perl has a feature called **taint checking** that alerts the developer of security loopholes and errors out until those issues are addressed. You can imagine taint checking as an imaginary code reviewer that constantly monitors your code for security-related issues. 
+
+This feature is turned on with the `-T` switch next to the shebang line. Once Perl sees this switch, it marks all the data coming from outside as tainted. Just for reinforcement, turning on this feature does not guarantee that the security issues are automatically fixed, it will just alert the potential loopholes, and is your responsibility to fix them.
+
+Let's modify the previous script to turn on taint checking:
+
+```perl
+#!/usr/bin/perl -T
+
+use strict;
+use warnings;
+
+my $input = $ARGV[0];
+
+print "Input: $input\n";
+open (my $fh, $input) or die $!;
+
+while (<$fh>) {
+    print $_;
+}
+
+close $fh;
+```
+
+Now if we run the script we'll receive the following alert:
+
+```bash
+perl caution.pl "perl ..\..\module_03\for_loop.pl |"
+"-T" is on the #! line, it must also be used on the command line at .\caution.pl line 1.
+```
+
+It means that we've to add the `-T` switch in the command line as well while running the program. This additional security blocks a malicious user from getting around taint checking by using a different Perl binary. Let's run it again passing the `-T` switch at the command line.
+
+```bash
+perl -T caution.pl "perl ..\..\module_03\for_loop.pl |"
+Input: perl ..\..\module_03\for_loop.pl |
+Insecure $ENV{PATH} while running with -T switch at .\caution.pl line 9.
+```
+
+Previously we saw that without the `-T` switch the command passed in double quotes was executed, now with taint checking turned on, we are alerted with an insecure path variable while running the script.
+
+Though this blocks any security issues, what if you are in a development environment, and you are not too concerned about security issues? To address these scenarios, Perl offers a softer version of taint checking, and we just have to replace the uppercase `-T` with a lowercase `-t`.
+
+```bash
+perl -t caution.pl "perl ..\..\module_03\for_loop.pl |"
+Input: perl ..\..\module_03\for_loop.pl |
+Insecure $ENV{PATH} while running with -t switch at .\caution.pl line 9.
+Insecure dependency in piped open while running with -t switch at .\caution.pl line 9.
+"my" variable @numbers masks earlier declaration in same scope at ..\..\module_03\for_loop.pl line 28.
+Scalar value @numbers[...] better written as $numbers[...] at ..\..\module_03\for_loop.pl line 35.
+Scalar value @numbers[...] better written as $numbers[...] at ..\..\module_03\for_loop.pl line 35.
+2 * 2 = 4
+4 * 2 = 8
+6 * 2 = 12
+8 * 2 = 16
+10 * 2 = 20
+```
+
+Now the error has turned into a warning, and the program continues to run.
+
+To fix the tainted data, Perl recommends using regular expressions to allow only good input data and block the bad ones. So let's modify our script and add the following validation:
+
+```perl
+my $input;
+if ($ARGV[0] =~ /^(?!.*[|$%;]).*/) {
+    $input = $ARGV[0];
+}
+```
+
+We're telling Perl to block characters like `$`, `|`, `%`, and `;` from the input parameter. If the input doesn't match this metacharacters, it will be assigned to the variable `$input`.
+
+Let's rerun the script:
+
+```bash
+perl -t caution.pl "perl ..\..\module_03\for_loop.pl |"
+Input:
+Use of uninitialized value $input in open at .\caution.pl line 12.
+No such file or directory at .\caution.pl line 12.
+```
+
+Now the bad input is successfully blocked. If we pass the actual file name, it runs smoothly.
+
+```bash
+perl -t caution.pl "perl ..\..\module_03\for_loop.pl"
+Input: 
+```
+
+That's because the input is invalid. The argument should not contain double dots.
+
+```bash
+perl -t caution.pl danger.pl
+Input: danger.pl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+...
+```
+
+Secure Perl programming is a vast concept, and we just scratched the surface. Consider reading the [Perl Security Guide](https://perldoc.perl.org/perlsec.html) for more information, and check the [OWASP Security](https://owasp.org/) for more security tips.
