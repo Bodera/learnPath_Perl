@@ -47,5 +47,10 @@ sub mask_card_number {
     return $line;
 }
 
+sub sum {
+    my ($a, $b) = @_;
+    return $a + $b;
+}
+
 #return true.
 1;

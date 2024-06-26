@@ -7,9 +7,18 @@
 
 use strict;
 use warnings;
+use FileMasker;
 
-use Test::More tests => 1;
-BEGIN { use_ok('FileMasker') };
+use Test::More tests => 3;
+#BEGIN { use_ok('FileMasker') };
+
+my $mask_expected = 'CARD NUMBER: ************6828';
+my $mask_result = FileMasker::mask_card_number('CARD NUMBER: 6011490036796828');
+is($mask_result, $mask_expected, 'mask_card_number test with uppercase');
+
+ok(FileMasker::sum(6,6) == 12, "sum test");
+
+ok(FileMasker::mask_card_number('Card number: 6011490036796828') ne 'Card number: 6011490036796828', "mask_card_number test with lowercase");
 
 #########################
 

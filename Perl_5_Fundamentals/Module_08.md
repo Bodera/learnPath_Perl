@@ -242,3 +242,183 @@ use warnings;
 ```
 
 Secure Perl programming is a vast concept, and we just scratched the surface. Consider reading the [Perl Security Guide](https://perldoc.perl.org/perlsec.html) for more information, and check the [OWASP Security](https://owasp.org/) for more security tips.
+
+## Testing Perl scripts
+
+This section will teach you one of the important aspects of any software development, that is testing. It doesn't matter how well you write your code, if it doesn't satisfy the business cases, it's of no use to the business. Testing all business cases is paramount to the success of your project. So you need to test the business cases upfront before shipping your code to production. Perl offers a lot of modules for this purpose, and let's explore them now.
+
+On the previous module when we created the starting structure of a Perl module using the `h2xs` utility, it created a directory structure where the `lib` directory hosted the Perl module, and the directory named `t` hosted files that ends in a `.t` extension. That kind of file is a Perl test file that will hold all the test cases.
+
+Check it out how the template looks like:
+
+```perl
+# Before 'make install' is performed this script should be runnable with
+# 'make test'. After 'make install' it should work as 'perl FileMasker.t'
+
+#########################
+
+# change 'tests => 1' to 'tests => last_test_to_print';
+
+use strict;
+use warnings;
+
+use Test::More tests => 1;
+BEGIN { use_ok('FileMasker') };
+
+#########################
+
+# Insert your test code below, the Test::More module is use()ed here so read
+# its man page ( perldoc Test::More ) for help writing this test script.
+```
+
+This line:
+
+```perl
+use Test::More tests => 1;
+```
+
+Informs Perl interpreter the number of test cases to be executed. To write a test case you must start with an `ok` function.
+
+For the sake of simplicity, let's include a simple `sum` subroutine in that `FileMasker`module, which will accept two parameters and return the sum of them.
+
+```perl
+sub sum {
+    my ($a, $b) = @_;
+    return $a + $b;
+}
+```
+
+*This subroutine presents the exact same behavior as the previous one:*
+
+```perl
+sub sum {
+    return $[0] + $[1];
+}
+```
+
+For the changes to be effective, you may need to run `make install` or `gmake install` to rebuild the module. **But maybe not!**
+
+```bash
+perl Makefile.PL
+gmake install #Windows
+make install #Linux
+```
+
+Let's write our first test:
+
+```perl
+use FileMasker;
+use Test::More tests => 1;
+
+ok(FileMasker::sum(6,6) == 12);
+```
+
+And now we execute it:
+
+```bash
+perl t/FileMasker.t
+1..1
+ok 1
+```
+
+We receive a very simple output this time. The `1..1` indicates the number of test cases run. The `ok 1` statement, on the line below, indicates that the test passed.
+
+Let's write another test, forcing the test to fail:
+
+```perl
+use FileMasker;
+use Test::More tests => 2;
+
+ok(FileMasker::sum(6,6) == 12);
+ok(FileMasker::sum(10,10) == 8);
+```
+
+And now we execute it:
+
+```bash
+perl t/FileMasker.t
+1..2
+ok 1
+not ok 2
+#   Failed test at .\t\FileMasker.t line 16.
+# Looks like you failed 1 test of 2.
+```
+
+This time we get a `not ok` message indicating that the test failed at the provided line number.
+
+Now that we understand how to run a test case in Perl, let's write another test case that tests card masking. Sounds fair right?
+
+```perl
+use FileMasker;
+
+use Test::More tests => 3;
+
+my $mask_expected = 'CARD NUMBER: ************6828';
+my $mask_result = FileMasker::mask_card_number('CARD NUMBER: 6011490036796828');
+is($mask_result, $mask_expected, 'mask_card_number test with uppercase');
+
+ok(FileMasker::mask_card_number('Card number: 6011490036796828') ne 'Card number: 6011490036796828', "mask_card_number test with lowercase");
+
+ok(FileMasker::sum(6,6) == 12, "sum test");
+```
+
+Here I introduced a few flavors available on the `Test::More` module, consider reading the documentation for more details [here](https://metacpan.org/pod/Test::More). Before explain what this test suite does, let's run it.
+
+```bash
+perl t/FileMasker.t
+1..3
+ok 1 - mask_card_number test with uppercase
+not ok 2 - mask_card_number test with lowercase
+#   Failed test 'mask_card_number test with lowercase'
+#   at .\t\FileMasker.t line 19.
+ok 3 - sum test
+# Looks like you failed 1 test of 3.
+```
+
+We've added an optional parameter that serves as a test description. This is very useful when debugging. The `ok` function has the purpose to validate boolean expressions, for value comparisons the `is` function is more appropriate.
+
+Our tests provided us the info that our application has a gap, because it only masks the last 4 digits of the card number if the string number is written in uppercase.
+
+We can enhance the test report by replacing the `perl` command with `prove`. Just like that:
+
+```bash
+prove t/FileMasker.t
+.\t\FileMasker.t .. 1/3 
+#   Failed test 'mask_card_number test with lowercase'
+#   at .\t\FileMasker.t line 19.
+# Looks like you failed 1 test of 3.
+.\t\FileMasker.t .. Dubious, test returned 1 (wstat 256, 0x100)
+Failed 1/3 subtests
+
+Test Summary Report
+-------------------
+.\t\FileMasker.t (Wstat: 256 Tests: 3 Failed: 1)
+  Failed test:  2
+  Non-zero exit status: 1
+Files=1, Tests=3,  1 wallclock secs ( 0.00 usr +  0.01 sys =  0.01 CPU)
+Result: FAIL
+```
+
+Notice a subtle difference when we add the `-l` switch to `prove`, see more at the documentation page [here](https://perldoc.perl.org/prove).
+
+```bash
+prove -l t/FileMasker.t
+.\t\FileMasker.t .. 1/3 
+#   Failed test 'mask_card_number test with lowercase'
+#   at .\t\FileMasker.t line 19.
+Undefined subroutine &FileMasker::sum called at .\t\FileMasker.t line 21.
+# Looks like your test exited with 255 just after 2.
+.\t\FileMasker.t .. Dubious, test returned 255 (wstat 65280, 0xff00)
+Failed 2/3 subtests
+
+Test Summary Report
+-------------------
+.\t\FileMasker.t (Wstat: 65280 Tests: 2 Failed: 1)
+  Failed test:  2
+  Non-zero exit status: 255
+  Parse errors: Bad plan.  You planned 3 tests but ran 2.
+Files=1, Tests=2,  0 wallclock secs ( 0.00 usr +  0.00 sys =  0.00 CPU)
+Result: FAIL
+```
+
+Write proper unit test cases, addressing all possible outputs from your subroutine before shipping your code to production.
