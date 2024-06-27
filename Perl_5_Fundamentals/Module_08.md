@@ -422,3 +422,156 @@ Result: FAIL
 ```
 
 Write proper unit test cases, addressing all possible outputs from your subroutine before shipping your code to production.
+
+## Sorting lists
+
+When you're working with data, sorting is a common task that you are often faced with. Let's see how to sort lists in Perl.
+
+When your list contains only strings, you can simply use the `sort` function:
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @cards = ('Visa', 'MasterCard', 'American Express', 'Discover', 'Maestro');
+
+print "Array before sorting: @cards\n";
+@cards = sort @cards;
+print "Array after sorting: @cards\n";
+```
+
+As an output we get the following:
+
+```bash
+Array before sorting: Visa MasterCard American Express Discover Maestro
+Array after sorting: American Express Discover Maestro MasterCard Visa
+```
+
+Now let's see how to sort a list that only contains numbers using the same technique:
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @card_ocurrences = (111, 77, 98, 53, 109);
+
+print "Array before sorting: @card_ocurrences\n";
+@card_ocurrences = sort @card_ocurrences;
+print "Array after sorting: @card_ocurrences\n";
+```
+
+Output:
+
+```bash
+Array before sorting: 111 77 98 53 109
+Array after sorting: 109 111 53 77 98 
+```
+
+You can see the sorting is incorrect because the `sort` function treated all the numbers as a string and sorted it alphabetically and not numerically. To fix this, we need to use the **block sorting**. This syntax accepts two numbers represented by two special variables, separated by a spaceship operator `<=>`, which is the operator used for comparing two numbers. The spaceship operator returns **-1** if the left operand is less than the right operand, **0** if both are equal, and **1** if the left operand is greater than the right one.
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @card_ocurrences = (111, 77, 98, 53, 109);
+
+print "Array before sorting: @card_ocurrences\n";
+@card_ocurrences = sort {$a <=> $b} @card_ocurrences;
+print "Array after sorting: @card_ocurrences\n";
+```
+
+Output:
+
+```bash
+Array before sorting: 111 77 98 53 109
+Array after sorting: 53 77 98 109 111
+```
+
+At this point, you may be thinking that the output is hard to read. Hang tight because shortly we're going to learn how to format this display.
+
+Imagine a scenario which the business logic requires you to perform a custom sort on the list based on its length? Perl offers another feature that lets you write a subroutine and pass it to the `sort` function instead of the block, as we've sawn. The only requirement is that your subroutine must return either `-1`, `0` or `1`, to address the three different cases already mentioned.
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @cards = ('Visa', 'MasterCard', 'American Express', 'Discover', 'Maestro');
+
+sub compare {
+    if (length($a) < length($b)) {
+        return -1;
+    } elsif (length($a) == length($b)) {
+        0;
+    } else {
+        return 1;
+    }
+}
+
+print "Array before sorting: @cards\n";
+print "Array after sorting: ", sort compare @cards;
+print "\n";
+```
+
+Output:
+
+```bash
+Array before sorting: Visa MasterCard American Express Discover Maestro
+Array after sorting: VisaMaestroDiscoverMasterCardAmerican Express
+```
+
+We can see that the sorting is done based on the length of the strings. So far we've explored how to operate sort using ascending order, but what if we need to sort them in descending order? For that, Perl offers a reverse sort function.
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @cards = ('Visa', 'MasterCard', 'American Express', 'Discover', 'Maestro');
+print "Array before sorting: @cards\n";
+print "Array after sorting: ", sort @cards;
+print "\n";
+print "Array after sorting descending: ", reverse sort @cards;
+print "\n";
+```
+
+Output:
+
+```bash
+Array before sorting: Visa MasterCard American Express Discover Maestro
+Array after sorting: American ExpressDiscoverMaestroMasterCardVisa
+Array after sorting descending: VisaMasterCardMaestroDiscoverAmerican Express
+```
+
+We can apply the `reverse` on the 3 kinds of sorting that we've seen so far. But to reverse sort a list of numbers just swap the special variables in the `sort` function.
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @card_ocurrences = (111, 77, 98, 53, 109);
+
+print "Array before sorting: @card_ocurrences\n";
+print "Array after sorting: ", sort { $a <=> $b } @card_ocurrences;
+print "\n";
+print "Array after sorting descending: ", sort { $b <=> $a } @card_ocurrences;
+print "\n";
+```
+
+Output:
+
+```bash
+Array before sorting: 111 77 98 53 109
+Array after sorting: 53 77 98 109 111
+Array after sorting descending: 111 109 98 77 53
+```
