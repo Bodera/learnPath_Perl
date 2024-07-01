@@ -575,3 +575,87 @@ Array before sorting: 111 77 98 53 109
 Array after sorting: 53 77 98 109 111
 Array after sorting descending: 111 109 98 77 53
 ```
+
+## Formatting and Reporting in Perl
+
+Perl lets you generate simple reports and charts using PERL formats. A format informs the Perl interpreter about the static text location and the variable data location. You can refer to the documentation [here](https://perldoc.perl.org/perlform).
+
+The format name follows the `format` keyword, and if the format name is omitted, the formatted report is printed to the `STDOUT`. For example:
+
+```perl
+format <FORMAT_NAME> = 
+<FIELD_LINE>
+    <static text>
+    <dynamic data>;
+<VALUE_LINE>
+    <variables separated by commas>;
+```
+
+The `<FIELD_LINE>` specifies how the data needs to be formatted and can contain both text and field holders. A text holder holds static text that will be displayed at the output. A field holder holds the space where Perl eventually writes the data, a typical field holder is `&<` or `&>`. The use of `@` indicates the start of a regular field, and the use of `<` indicates that the field needs to be left justified, whereas the use of `>` indicates that the field needs to be right justified. The placeholder for a numeric field is `#`.
+
+The `<VALUE_LINE>` indicates the variable whose value needs to be applied on the `<FIELD_LINE>`. When the format is defined, the next step is to invoke it. Perl provides a `write` keyword to fetch the format, and a single `.` in column 1 is used to terminate a format. 
+
+By default, the `write` statement writes to the standard output by default, which is one open file handle. Since we need to write our output to the `STDOUT`, we need to associate our `format` with `STDOUT`. To achieve this lets first select the output handle using the `select` function and associate it using the special variable `$~`.
+
+The final step is to populate data to the scalar variables `$name` and `$ocurrence`.
+
+```perl
+#!/usr/bin/perl
+
+use warnings;
+
+format CARD_DETAILS =
+Card: @<<<<<<<<<<<<<<<< Ocurrence: @####
+$name, $ocurrence
+.
+
+select(STDOUT);
+$~ = CARD_DETAILS;
+
+my @cards = ('Visa', 'MasterCard', 'American Express', 'Discover', 'Maestro');
+my @card_ocurrences = (111, 77, 98, 53, 109);
+
+$i = 0;
+foreach(@cards) {
+    $name = $cards[$i];
+    $ocurrence = $card_ocurrences[$i];
+    $i++;
+    write;
+}
+```
+
+Output:
+
+```bash
+Card: Visa              Ocurrence:   111
+Card: MasterCard        Ocurrence:    77
+Card: American Express  Ocurrence:    98
+Card: Discover          Ocurrence:    53
+Card: Maestro           Ocurrence:   109
+```
+
+You might want to take a look at the [Perl 6 form](https://metacpan.org/release/DCONWAY/Perl6-Form-0.04/view/Form.pm), to implement reporting without using the `format` built-in.
+
+Here is the same code, without naming the format:
+
+```perl
+#!/usr/bin/perl
+
+use warnings;
+
+format =
+Card: @>>>>>>>>>>>>>>>> Ocurrence: @0####
+$name, $ocurrence
+.
+
+my @cards = ('Visa', 'MasterCard', 'American Express', 'Discover', 'Maestro');
+my @card_ocurrences = (111, 77, 98, 53, 109);
+
+$i = 0;
+foreach(@cards) {
+    $name = $cards[$i];
+    $ocurrence = $card_ocurrences[$i];
+    $i++;
+    write;
+}
+```
