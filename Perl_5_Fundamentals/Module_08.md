@@ -659,3 +659,89 @@ foreach(@cards) {
     write;
 }
 ```
+
+## Object-oriented programming in Perl
+
+Until now, we've only written programs in a procedural way. But in fact, Perl lets you develop modular and portable code using an object-oriented paradigm.
+
+In Perl, the package we used when creating a module, we will use to create a class. An object is a reference to the class, and a method or function in Perl is a subroutine. The Perl file must end with a `.pm` extension, and the package must have the same name as the file, so remember to export the directory to the `PERL5LIB` environment variable.
+
+To construct an object, it's very common to write a subroutine named `new`, anytime an object is created using this `new` method, Perl automatically passes the class name as the first argument. An object is a reference to a class, and Perl offers a built-in function, `bless`, that creates this reference and returns an instance of the class. Our class must return a true value.
+
+Our class should look like this:
+
+```perl
+package Card;
+
+sub new {
+    my ($class, $args) = @_;
+    my $self = bless {
+        card_name => $args->{card_name},
+        card_num => $args->{card_num},
+        card_sec_code => $args->{card_sec_code}
+    }, $class;
+}
+
+sub to_string {
+    my $self = shift;
+    return "Card name: $self->{card_name}\nCard number: $self->{card_num}\nCard security code: $self->{card_sec_code}\n";
+}
+
+1;
+```
+
+Demo:
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Card;
+
+my $card = Card->new({card_name => 'John Doe', card_num => '1234567890123456', card_sec_code => 123});
+print $card->to_string;
+```
+
+Output:
+
+```bash
+Card name: John Doe
+Card number: 1234567890123456
+Card security code: 123
+```
+
+Let's cover now another object-oriented programming concept: **inheritance**. Imagine a scenario where you have two types of a card, a magnetic stripe card and a chip card. Both these are card types. So instead of creating a new class, let's create a class named `Chipcard`, so then we can inherit it from the `Card` class. To set up the inheritance relation between classes, Perl offers a special variable, `@ISA`, which is used to refer there is a relationship. Pay attention to the use of the `our` keyword, which indicates the opposite of the `my` keyword in the sense it declares a variable to be global, that is visible across the entire lexical scope and package boundaries. 
+
+```perl
+package Chipcard;
+require Card;
+
+our @ISA = qw(Card);
+1;
+```
+
+Demo:
+
+```perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+require Chipcard;
+
+my $chipcard = Chipcard->new({card_name => 'Mary Doe', card_num => '6543210987654321', card_sec_code => 321});
+
+print $chipcard->to_string;
+```
+
+Output:
+
+```bash
+Card name: Mary Doe
+Card number: 6543210987654321
+Card security code: 321
+```
+
+We've proven that there is a relationship between classes, because the `Chipcard` class inherits from the `Card` class and can access the `to_string` parent class method. But nothing stops us from doing an overload of the `to_string` method.
