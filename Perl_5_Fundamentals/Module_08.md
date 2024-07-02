@@ -745,3 +745,16 @@ Card security code: 321
 ```
 
 We've proven that there is a relationship between classes, because the `Chipcard` class inherits from the `Card` class and can access the `to_string` parent class method. But nothing stops us from doing an overload of the `to_string` method.
+
+## Perl best practices
+
+- Enforce proper indentation and documentation to enhance readability.
+- Comments focused on "what" and "why", not the "how".
+- Maintain a consistent and well-defined naming convention.
+- Develop concise subroutines.
+- Refactor large monoliths into smaller modular pieces.
+- Strive to a high code coverage ratio.
+- Always use the `strict` and `warnings` pragmas. Pay attention to error handling and address any warnings issued by the Perl interpreter.
+- Minimize the use of `unless` and `until` statements as they can be confusing.
+- Think of creative ways to hack your own program.
+- Check CPAN modules before creating your own. Strive for code reuse.
